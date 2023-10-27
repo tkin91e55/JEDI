@@ -140,7 +140,7 @@
 ### Installing spack-stack
 
  1. Get VM, VM network (SSH) ready.
- 1. Follow [reference](#references) `1.` to install ubuntu 20.04 prerequisites:
+ 1. Follow [reference](#references) `2.` to install ubuntu 20.04 prerequisites:
 
     ```bash
     # at root mode
