@@ -120,23 +120,21 @@
 
   1. Macbook with M-series cores (mackbook M1, M2 etc) is in ARM architecture, need to emulate AMD/X86,
     the virtualization runs really slow. Emulations is hardware simulation like playing PS3, Switch
-    on PC, performance cut.
-
+    on PC, performance cut.<br>
     VirtualBox doesn't support M-series Mac yet... need to use Home Intel workstation,
     Macbook virtualize x86/amd64 need emulation, much slower
 
-  1. Need Ubuntu 20.04, not 22.04, to save trouble, installing wgrib2 has trouble to distinguish the Ubuntu
+  1. Need Ubuntu 20.04, not 22.04, to save trouble, installing wgrib2 has trouble to detect the Ubuntu
      22, later version of spack-stack 1.5.0 seems to have fixed it, but here stick to 1.3.1 first.
-     check [here](https://github.com/JCSDA/spack-stack/blob/release/1.5.0-nco/configs/sites/hercules/packages.yaml#L24C32-L24C32)
-
-     spack-stack later version should also support backwards.
-
-    1. Need Desktop but not server version, as spack-stack requires Qt and windows.h
-    1. though support 22.04, the doc has some problem with some packages, 20.04 is one-click install
+     check [here](https://github.com/JCSDA/spack-stack/blob/release/1.5.0-nco/configs/sites/hercules/packages.yaml#L24C32-L24C32)<br>
+     spack-stack later version should also support backwards.<br>
+      1. Need Desktop but not server version, as spack-stack requires Qt and windows.h
+      1. though support 22.04, the doc has some problem with some packages, 20.04 is one-click install
 
 
 ## Steps
 
+  There are two parts.
 
 ### Installing spack-stack
 
@@ -153,80 +151,81 @@
     apt install -y environment-modules
 
     # Misc
-    apt install -y build-essential libkrb5-dev m4 git git-lfs bzip2 unzip automake xterm texlive libcurl4-openssl-dev libssl-dev mysql-server libmysqlclient-dev
+    apt install -y build-essential libkrb5-dev m4 git git-lfs \
+    bzip2 unzip automake xterm texlive libcurl4-openssl-dev \
+    libssl-dev mysql-server libmysqlclient-dev
 
     # Python
     apt install -y python3-dev python3-pip
 
     # reboot VM
     ```
-
  1. git clone the spack-stack repo and checkout version 1.3.1 and update the submodules
 
-   ```bash
-   git clone https://github.com/JCSDA/spack-stack
-   git checkout -b release/1.3.1 origin/release/1.3.1
-   git submodule init
-   git submodule update #wait to download
-   ```
+     ```bash
+     git clone https://github.com/JCSDA/spack-stack
+     git checkout -b release/1.3.1 origin/release/1.3.1
+     git submodule init
+     git submodule update #wait to download
+     ```
  1. source the setup.sh, and spack the virtual env
 
-   ```bash
-   cd spack-stack
-   source setup.sh
+     ```bash
+     cd spack-stack
+     source setup.sh
 
-   #--name is up to you, but keep simple just follow the doc
-   spack stack create env --site linux.default --template unified-env --name unified-dev.mylinux
-   spack env acticvate -p envs/unified-dev.mylinux #after this, the have a prefix name appears before command prompt, hinting env activated
+     #--name is up to you, but keep simple just follow the doc
+     spack stack create env --site linux.default --template unified-env --name unified-dev.mylinux
+     spack env acticvate -p envs/unified-dev.mylinux #after this, the have a prefix name appears before command prompt, hinting env activated
 
-   pwd # display current path, for exmaple /home/dev/spack-stack
-   export SPACK_SYSTEM_CONFIG_PATH="/home/dev/unified-dev.mylinux/site" # hard coded it, $PWD mentioned in doc should work too
-   spack external find --scope system # it search a bit while, and added system packages to its spack env packages
-   spack external find --scope system perl python wget mysql texlive # no need curl
-   spack compiler find --scope system # remember the current version in the Ubuntu22.04, mine was 9.4.0
-   unset SPACK_SYSTEM_CONFIG_PATH
+     pwd # display current path, for exmaple /home/dev/spack-stack
+     export SPACK_SYSTEM_CONFIG_PATH="/home/dev/unified-dev.mylinux/site" # hard coded it, $PWD mentioned in doc should work too
+     spack external find --scope system # it search a bit while, and added system packages to its spack env packages
+     spack external find --scope system perl python wget mysql texlive # no need curl
+     spack compiler find --scope system # remember the current version in the Ubuntu22.04, mine was 9.4.0
+     unset SPACK_SYSTEM_CONFIG_PATH
 
-   spack config add "packages:all:providers:mpi:[mpich@4.0.2]"
-   spack config add "packages:all:compiler:[gcc@9.4.0]" #used own system compiler instead the 10.3.0
-   ```
+     spack config add "packages:all:providers:mpi:[mpich@4.0.2]"
+     spack config add "packages:all:compiler:[gcc@9.4.0]" #used own system compiler instead the 10.3.0
+     ```
 
-   Note the available site and templates are under: config/sites and config/templates, for different
-   deployment env, ubuntu just use linux.default. As for HPC things, I don't know, other codenames
-   are unfamiliar for me.
+     Note the available site and templates are under: config/sites and config/templates, for different
+     deployment env, ubuntu just use linux.default. As for HPC things, I don't know, other codenames
+     are unfamiliar for me.
 
   1. edit envs/unified-dev.mylinux/spack.yml, find the line
 
-   ```
-   # definitions:
-   # - compilers: ['clang_g++'...]
-   replace as
-   # - compilers: ['%gcc']
-   ```
+     ```
+     # definitions:
+     # - compilers: ['clang_g++'...]
+     replace as
+     # - compilers: ['%gcc']
+     ```
 
-   For such thing generally, grep and replace throughout the project
+     For such thing generally, grep and replace throughout the project
 
   1. As for remove any external cmake@3.2.0, nothing to do after grepping
   1. concretize and install
 
-   ```bash
-   spack concretize # wait a while and display a tree of packages to install
-   spack install --fail-fast # fail-fast will stop once there is build error, but this time, no error at all
-   # just wait wait wait for success, no more desperation
-   ```
+     ```bash
+     spack concretize # wait a while and display a tree of packages to install
+     spack install --fail-fast # fail-fast will stop once there is build error, but this time, no error at all
+     # just wait wait wait for success, no more desperation
+     ```
   1. `spack module tcl refresh `, let it do something, it said success, good
   1. `spack stack setup-meta-modules`
   1.  reboot VM
   1. activate the spack env again, and
 
-   ```bash
-   spack env acticvate -p envs/unified-dev.mylinux
-   # spack stack setup-meta-modules, need or not needed again?
-   ```
+     ```bash
+     spack env acticvate -p envs/unified-dev.mylinux
+     # spack stack setup-meta-modules, need or not needed again?
+     ```
 
-   Now, check if `which module` or `module help` show something, then success.
-   Make sure `module` is here, to be used next part.
+     Now, check if `which module` or `module help` show something, then success.
+     Make sure `module` is here, to be used next part.
 
-### Installing mpas
+### Installing MPAS
 
   This is to install MPAS by mpas-bundle with spack-stack. The thing left is simple:
 
@@ -234,17 +233,17 @@
 
   1. make a folder like mpas2 first, go into it. Then git clone and checkout proper version
 
-   ```bash
-   mkdir mpas2 && cd mpas2
-   git clone https://github.com/JCSDA/mpas-bundle.git && cd mpas-bundle
-   git checkout -b release/2.0.0 origin/release/2.0.0
-   ```
+     ```bash
+     mkdir mpas2 && cd mpas2
+     git clone https://github.com/JCSDA/mpas-bundle.git && cd mpas-bundle
+     git checkout -b release/2.0.0 origin/release/2.0.0
+     ```
   1. go upper and create `build` folder for make and install
 
-   ```bash
-   cd .. && mkdir build && cd build
-   ```
-  1. now, the doc is outdated, but refer to the gnu-openmpi-cheyenne.sh
+     ```bash
+     cd .. && mkdir build && cd build
+     ```
+  1. now, the doc is outdated, but refer to the gnu-openmpi-cheyenne.sh<br>
      Actually all four script are mostly same, csh is for C-Shell (nevere used before)
 
      Inspect this (*DON'T DO ANYTHING*):
@@ -290,19 +289,19 @@
      ```
   1. at build/, after `module load`, double check now you have the `ecbuild`, e.g. `which ecbuild`
 
-    ```bash
-    eccbuild ../mpas-bundle
-    make -j4
+      ```bash
+      ecbuild ../mpas-bundle
+      make -j4
 
-    # then wait wait wait... 100% complete, success
-    ```
+      # then wait wait wait... 100% complete, success
+      ```
   1. run tests, I got 96% passed. May hint something wrong, or just the test cases outdated. Depend
      on what to do next, but it is outside my scope now.
 
-     ```bash
-     cd mpas-jedi
-     ctest
-     ```
+       ```bash
+       cd mpas-jedi
+       ctest
+       ```
   1. END HERE
 
 # Cmake approach
