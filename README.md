@@ -76,17 +76,17 @@
 
 # VM+PackageManager based approach
 
-  __References__:
+## References
 
   1. [Spack-statck for MPAS](https://spack-stack.readthedocs.io/en/1.3.1/)
-    * general doc, too broad
-    * the latest version is also good too, but stick to 1.3.1 first
-    * Spack is package manager for HPC
+      * general doc, too broad
+      * the latest version is also good too, but stick to 1.3.1 first
+      * Spack is package manager for HPC
   2. [Ubuntu20.04 prerequisite](https://spack-stack.readthedocs.io/en/1.3.1/NewSiteConfigs.html#prerequisites-ubuntu-20-04-one-off)
-    * the most useful section, mostly follow here.
-    * don't read latest version doc, read 1.3.1
+      * the most useful section, mostly follow here.
+      * don't read latest version doc, read 1.3.1
   3. [mpas-bundle repo](https://github.com/JCSDA/mpas-bundle/tree/2.0.0)
-    * need to have spack-stack installed
+      * need to have spack-stack installed
 
 
 ## Spec
@@ -134,12 +134,13 @@
 
 ## Steps
 
-  There are two parts.
+  There are two parts: [Installing spack-stack](#installing-spack-stack) then
+  [Installing MPAS](#installing-mpas)
 
 ### Installing spack-stack
 
  1. Get VM, VM network (SSH) ready.
- 1. Follow reference `1.` to install ubuntu 20.04 prerequisites:
+ 1. Follow [reference](#references) `1.` to install ubuntu 20.04 prerequisites:
 
     ```bash
     # at root mode
@@ -229,7 +230,7 @@
 
   This is to install MPAS by mpas-bundle with spack-stack. The thing left is simple:
 
-  Refer to reference `3.`
+  Refer to [reference](#references) `3.`
 
   1. make a folder like mpas2 first, go into it. Then git clone and checkout proper version
 
