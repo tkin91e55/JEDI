@@ -40,8 +40,9 @@
 
      Unless going deeper and digging out the core structure of the whole project (which though is
      good), beginner and users can skip most of messing up internal dependency by following guide first
-     ( this is not ensured to work out-of-the-box depending the user's environment: CPU archi, system
-     authorization, hardware resources)
+     ( this is already challenging enough, no one can ensure new-comers to work out-of-the-box, there
+     can be problems depending the user's environment: CPU archi, system authorization, hardware resources,
+     these factors need to be fighted, for god sake...)
 
   1. Virtualisation: don't pollute own OS in development or let own OS stage pollute the build.
      Therefore, start with fresh installation of environment. If change own OS packages, it can
